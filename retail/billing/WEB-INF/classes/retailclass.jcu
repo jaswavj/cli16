@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<workspace_user>
+	<active_project>
+		<label>retailclass</label>
+	</active_project>
+	<projects>
+		<project>
+			<label>retailclass</label>
+			<showfiles>false</showfiles>
+			<folderitem>
+				<path>billing</path>
+			</folderitem>
+			<folderitem>
+				<path>cafeorder</path>
+			</folderitem>
+			<folderitem>
+				<path>cheque</path>
+			</folderitem>
+			<folderitem>
+				<path>path</path>
+			</folderitem>
+			<folderitem>
+				<path>print</path>
+			</folderitem>
+			<folderitem>
+				<path>product</path>
+			</folderitem>
+			<folderitem>
+				<path>user</path>
+			</folderitem>
+			<folderitem>
+				<path>util</path>
+			</folderitem>
+		</project>
+	</projects>
+	<open_files>
+		<docitem>
+			<path>billing\billingBean.java</path>
+			<source>true</source>
+			<index>0</index>
+			<active>true</active>
+		</docitem>
+		<docitem>
+			<path>billing\ProductItem.java</path>
+			<source>true</source>
+			<index>1</index>
+			<active>false</active>
+		</docitem>
+	</open_files>
+</workspace_user>
