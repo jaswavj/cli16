@@ -46,7 +46,9 @@ if (!permissions.contains(13)) {
     <style>
         .pending-wrap { padding: 10px; }
         .pending-card { background: #fff; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-        .pending-title { font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #444; }
+        .pending-title { font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #444; }
+        #pendingTable th { font-size: 1rem; font-weight: 700; white-space: nowrap; }
+        #pendingTable td { font-size: 1rem; vertical-align: middle; }
         .click-row { cursor: pointer; }
         .click-row:hover > td { background: #f7f7fb; }
         .delivery-alert-row > td { background: #fdeaea !important; }
@@ -131,6 +133,10 @@ if (!permissions.contains(13)) {
                     <div class="mb-3">
                         <label for="editDeliveryDate" class="form-label">Delivery Date</label>
                         <input type="date" id="editDeliveryDate" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editDescription" class="form-label">Description</label>
+                        <textarea id="editDescription" class="form-control" rows="3" readonly placeholder="No description"></textarea>
                     </div>
                     <div class="form-check mb-2">
                         <input class="form-check-input" type="checkbox" id="editDownloaded" onchange="togglePhotoCount(this)">
@@ -364,6 +370,7 @@ if (!permissions.contains(13)) {
             document.getElementById('editBillId').value = bill.id;
             document.getElementById('editBillNo').textContent = bill.billNo || '-';
             document.getElementById('editDeliveryDate').value = bill.deliveryDate || '';
+            document.getElementById('editDescription').value = bill.description || bill.discription || '';
             const downloaded = Number(bill.isDownloaded) === 1;
             document.getElementById('editDownloaded').checked = downloaded;
             const photoEl = document.getElementById('editPhotoCount');
@@ -468,6 +475,25 @@ if (!permissions.contains(13)) {
             document.getElementById('filterCustomerName').addEventListener('input', applyFilters);
             document.getElementById('filterPhone').addEventListener('input', applyFilters);
             document.getElementById('filterDownloaded').addEventListener('change', applyFilters);
+
+            // Keep sidebar closed by default when this page loads.
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const mobile = window.innerWidth <= 768;
+            if (sidebar) {
+                sidebar.classList.remove('show');
+                if (!mobile) {
+                    sidebar.classList.add('hidden');
+                }
+            }
+            if (sidebarOverlay) {
+                sidebarOverlay.classList.remove('show');
+            }
+            document.body.classList.remove('sidebar-open');
+            if (!mobile) {
+                document.body.classList.add('sidebar-hidden');
+            }
+
             loadPendingBills(true);
         });
     </script>

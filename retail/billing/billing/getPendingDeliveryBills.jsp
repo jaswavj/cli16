@@ -18,6 +18,7 @@ try {
     con = util.DBConnectionManager.getConnectionFromPool();
     String sql = "SELECT id, bill_display, date, time, IFNULL(cusName,'-') AS cusName, IFNULL(cusPhn,'-') AS cusPhn, " +
                  "IFNULL(payable,0) AS payable, delivery_date, delivered_date, IFNULL(is_downloaded,0) AS is_downloaded, download_date, " +
+                 "IFNULL(description,'') AS description, " +
                  "IFNULL(delivery_place,'') AS delivery_place, IFNULL(delivery_person,'') AS delivery_person, IFNULL(photo_count,0) AS photo_count " +
                  "FROM prod_bill " +
                  "WHERE IFNULL(is_cancelled,0)=0 AND IFNULL(is_delivered,0)=0 " +
@@ -36,6 +37,7 @@ try {
         obj.put("customerName", rs.getString("cusName"));
         obj.put("customerPhone", rs.getString("cusPhn"));
         obj.put("payable", rs.getDouble("payable"));
+        obj.put("description", rs.getString("description"));
         obj.put("deliveryPlace", rs.getString("delivery_place"));
         obj.put("deliveryPerson", rs.getString("delivery_person"));
 
