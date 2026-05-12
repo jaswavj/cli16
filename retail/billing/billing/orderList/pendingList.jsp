@@ -46,13 +46,45 @@ if (!permissions.contains(2)) {
     <style>
         .pending-wrap { padding: 10px; }
         .pending-card { background: #fff; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-        .pending-title { font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #444; }
-        #pendingTable th { font-size: 1rem; font-weight: 700; white-space: nowrap; }
-        #pendingTable td { font-size: 1rem; vertical-align: middle; }
+        .pending-title { font-size: 1.3rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #444; }
+        #pendingTable th { font-size: 1.08rem; font-weight: 700; white-space: nowrap; }
+        #pendingTable td { font-size: 1.05rem; vertical-align: middle; }
+        .pending-card .form-label { font-size: 1.12rem; font-weight: 500; }
+        .pending-card .form-control,
+        .pending-card .form-select { font-size: 1.08rem; }
+        .pending-card .btn,
+        .pending-card .btn-sm { font-size: 1rem; }
+        .modal .modal-title { font-size: 1.35rem; font-weight: 700; }
+        .modal .modal-body,
+        .modal .modal-body .form-label,
+        .modal .modal-body .form-check-label,
+        .modal .modal-body .small,
+        .modal .modal-body div,
+        .modal .modal-body span { font-size: 1.12rem; }
+        .modal .modal-body .form-control,
+        .modal .modal-body .form-select,
+        .modal .modal-body textarea { font-size: 1.1rem; }
+        .modal .modal-footer .btn { font-size: 1.12rem; }
         .click-row { cursor: pointer; }
         .click-row:hover > td { background: #f7f7fb; }
         .delivery-alert-row > td { background: #fdeaea !important; }
         .delivery-alert-row:hover > td { background: #f9dede !important; }
+
+        @media (max-width: 768px) {
+            .pending-title { font-size: 1.15rem; }
+            #pendingTable th { font-size: 0.98rem; }
+            #pendingTable td { font-size: 0.96rem; }
+            .pending-card .form-label { font-size: 1rem; }
+            .pending-card .form-control,
+            .pending-card .form-select { font-size: 1rem; }
+            .modal .modal-title { font-size: 1.2rem; }
+            .modal .modal-body,
+            .modal .modal-body .form-label,
+            .modal .modal-body .form-check-label,
+            .modal .modal-body .small,
+            .modal .modal-body div,
+            .modal .modal-body span { font-size: 1rem; }
+        }
     </style>
 </head>
 <body>

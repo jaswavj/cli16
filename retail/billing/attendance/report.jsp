@@ -39,11 +39,43 @@ String today = sdf.format(new Date());
     <title>Attendance Report</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <jsp:include page="/assets/common/head.jsp" />
+    <style>
+        .attendance-report-wrap .card-header h5 {
+            font-size: 1.35rem;
+            font-weight: 700;
+        }
+        .attendance-report-wrap .form-label {
+            font-size: 1.12rem;
+            font-weight: 500;
+        }
+        .attendance-report-wrap .form-control,
+        .attendance-report-wrap .form-select,
+        .attendance-report-wrap .btn,
+        .attendance-report-wrap table th,
+        .attendance-report-wrap table td,
+        .attendance-report-wrap .badge {
+            font-size: 1.05rem;
+        }
+        @media (max-width: 768px) {
+            .attendance-report-wrap .card-header h5 {
+                font-size: 1.18rem;
+            }
+            .attendance-report-wrap .form-label,
+            .attendance-report-wrap .form-control,
+            .attendance-report-wrap .form-select,
+            .attendance-report-wrap .btn,
+            .attendance-report-wrap table th,
+            .attendance-report-wrap table td,
+            .attendance-report-wrap .badge {
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
 <jsp:include page="/assets/navbar/navbar.jsp" />
 
-<div class="container-fluid mt-4">
+<div class="container-fluid mt-4 attendance-report-wrap">
     <div class="row">
         <div class="col-12">
             <div class="card shadow-sm">

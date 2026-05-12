@@ -16,6 +16,32 @@ Vector productList = prod.getAllProduct();
     <title>CASH BANK</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <jsp:include page="/assets/common/head.jsp" />
+    <style>
+        .container.mt-4 h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+        }
+        .container.mt-4 .form-label {
+            font-size: 1.12rem;
+            font-weight: 500;
+        }
+        .container.mt-4 .form-control,
+        .container.mt-4 .form-select,
+        .container.mt-4 .btn {
+            font-size: 1.08rem;
+        }
+        @media (max-width: 768px) {
+            .container.mt-4 h3 {
+                font-size: 1.15rem;
+            }
+            .container.mt-4 .form-label,
+            .container.mt-4 .form-control,
+            .container.mt-4 .form-select,
+            .container.mt-4 .btn {
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
 

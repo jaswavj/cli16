@@ -16,7 +16,54 @@ Vector billList = bill.getDueBills();
     <style>
     .red-text {
         color: red !important;
-        
+    }
+    .container.mt-4 h4 {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+    .container.mt-4 .form-label {
+      font-size: 1.12rem;
+      font-weight: 500;
+    }
+    .container.mt-4 .form-control,
+    .container.mt-4 .input-group-text,
+    .container.mt-4 .btn {
+      font-size: 1.08rem;
+    }
+    #billingTable th {
+      font-size: 1.08rem !important;
+    }
+    #billingTable td {
+      font-size: 1.05rem !important;
+    }
+    #billDetailModal .modal-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+    #billDetailModal .modal-body,
+    #billDetailModal .modal-body div,
+    #billDetailModal .modal-body span,
+    #billDetailModal .modal-body td,
+    #billDetailModal .modal-body th,
+    #billDetailModal .modal-footer .btn {
+      font-size: 1.12rem;
+    }
+    @media (max-width: 768px) {
+      .container.mt-4 h4 {
+        font-size: 1.15rem;
+      }
+      .container.mt-4 .form-label,
+      .container.mt-4 .form-control,
+      .container.mt-4 .input-group-text,
+      .container.mt-4 .btn,
+      #billDetailModal .modal-body,
+      #billDetailModal .modal-body div,
+      #billDetailModal .modal-body span,
+      #billDetailModal .modal-body td,
+      #billDetailModal .modal-body th,
+      #billDetailModal .modal-footer .btn {
+        font-size: 1rem;
+      }
     }
 </style>
 </head>

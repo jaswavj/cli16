@@ -24,12 +24,52 @@ String billNo = (billDetails.size() > 3 && billDetails.get(3) != null) ? billDet
     <%@ include file="/assets/common/head.jsp" %>
     <style>
         body { background: #f8f9fa; }
-        h4 { font-weight: 600; }
-        .form-label { font-weight: 500; }
+        .pay-balance-wrap h4 {
+            font-weight: 700;
+            font-size: 1.35rem;
+        }
+        .pay-balance-wrap h5 {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        .pay-balance-wrap .form-label {
+            font-weight: 500;
+            font-size: 1.12rem;
+        }
+        .pay-balance-wrap .form-control,
+        .pay-balance-wrap .form-select,
+        .pay-balance-wrap .btn,
+        .pay-balance-wrap .alert {
+            font-size: 1.08rem;
+        }
+        .pay-balance-wrap .table th {
+            font-size: 1.08rem;
+            font-weight: 700;
+        }
+        .pay-balance-wrap .table td {
+            font-size: 1.05rem;
+        }
+        @media (max-width: 768px) {
+            .pay-balance-wrap h4 {
+                font-size: 1.15rem;
+            }
+            .pay-balance-wrap h5 {
+                font-size: 1.1rem;
+            }
+            .pay-balance-wrap .form-label,
+            .pay-balance-wrap .form-control,
+            .pay-balance-wrap .form-select,
+            .pay-balance-wrap .btn,
+            .pay-balance-wrap .alert,
+            .pay-balance-wrap .table th,
+            .pay-balance-wrap .table td {
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
-<div class="container-fluid  d-flex flex-column">
+<div class="container-fluid d-flex flex-column pay-balance-wrap">
 
     <!-- Navbar -->
     <%@ include file="/assets/navbar/navbar.jsp" %>

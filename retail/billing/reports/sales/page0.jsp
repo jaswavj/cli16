@@ -34,6 +34,47 @@ String contextPath = request.getContextPath();
     <title>Collection Report</title>
 <jsp:include page="/assets/common/head.jsp" />
 
+<style>
+    .sales-report-wrap > p,
+    .sales-report-wrap > p strong {
+        font-size: 1.12rem;
+    }
+
+    .sales-report-wrap .btn,
+    .sales-report-wrap .btn.btn-sm {
+        font-size: 1rem;
+    }
+
+    .sales-report-wrap #printTable {
+        font-size: 1.02rem !important;
+    }
+
+    .sales-report-wrap #printTable th {
+        font-size: 1.06rem !important;
+        font-weight: 700 !important;
+    }
+
+    .sales-report-wrap #printTable td {
+        font-size: 1.03rem !important;
+    }
+
+    .sales-report-wrap .approve-chk {
+        transform: scale(1.15);
+    }
+
+    @media (max-width: 768px) {
+        .sales-report-wrap > p,
+        .sales-report-wrap > p strong,
+        .sales-report-wrap .btn,
+        .sales-report-wrap .btn.btn-sm,
+        .sales-report-wrap #printTable th,
+        .sales-report-wrap #printTable td,
+        .sales-report-wrap #printTable {
+            font-size: 0.98rem !important;
+        }
+    }
+</style>
+
 
 
 
@@ -44,7 +85,7 @@ String contextPath = request.getContextPath();
 
 
 
-<div class="container mt-4 ">
+<div class="container mt-4 sales-report-wrap">
 <p ><strong>Collection Report From:</strong> <%= fromDate %> - <%= toDate %></p>
     <div class="mb-3 no-print">
         <a href="<%=contextPath%>/reports/sales/page.jsp" class="btn btn-secondary btn-sm me-2">⬅ Back</a>
@@ -56,6 +97,7 @@ String contextPath = request.getContextPath();
     <thead style="background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);">
         <tr>
             <th style="padding: 0.4rem; font-weight: 600; color: #4a5568; border: none; font-size: 0.85rem;">S.No</th>
+            <th class="no-print" style="padding: 0.4rem; font-weight: 600; color: #4a5568; border: none; font-size: 0.85rem; text-align:center;">Approved</th>
             <th style="padding: 0.4rem; font-weight: 600; color: #4a5568; border: none; font-size: 0.85rem;">Bill No</th>
             <th style="padding: 0.4rem; font-weight: 600; color: #4a5568; border: none; font-size: 0.85rem;">Name</th>
             <th style="padding: 0.4rem; font-weight: 600; color: #4a5568; border: none; font-size: 0.85rem;">Phone</th>
@@ -68,7 +110,6 @@ String contextPath = request.getContextPath();
             <th style="padding: 0.4rem; font-weight: 600; color: #4a5568; border: none; font-size: 0.85rem;">Date</th>
             <th style="padding: 0.4rem; font-weight: 600; color: #4a5568; border: none; font-size: 0.85rem;">Time</th>
             <th style="padding: 0.4rem; font-weight: 600; color: #4a5568; border: none; font-size: 0.85rem;">Staff</th>
-            <th class="no-print" style="padding: 0.4rem; font-weight: 600; color: #4a5568; border: none; font-size: 0.85rem; text-align:center;">Approved</th>
             
         </tr>
     </thead>
@@ -120,6 +161,9 @@ String contextPath = request.getContextPath();
         %>
         <tr style="border-bottom: 1px solid #f1f5f9; transition: all 0.2s;">
             <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;"><%=i+1%></td>
+            <td class="no-print" style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem; text-align:center;">
+                <input type="checkbox" class="approve-chk" data-bill-id="<%=billId%>" onchange="approveBill(this)" <%=isApproved == 1 ? "checked disabled" : ""%>>
+            </td>
             <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;"><%=billNo%></td>
             <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;">
                 <a href="<%=contextPath%>/billing/print.jsp?billNo=<%=billNo%>" target="_blank" style="color:#2563eb; text-decoration:none; font-weight:500;">
@@ -136,9 +180,6 @@ String contextPath = request.getContextPath();
             <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;"><%=row.elementAt(5)%></td>
             <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;"><%=row.elementAt(6)%></td>
             <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;"><%=row.elementAt(7)%></td>
-            <td class="no-print" style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem; text-align:center;">
-                <input type="checkbox" class="approve-chk" data-bill-id="<%=billId%>" onchange="approveBill(this)" <%=isApproved == 1 ? "checked disabled" : ""%>>
-            </td>
         </tr>
         <%
         }
@@ -178,6 +219,9 @@ String contextPath = request.getContextPath();
         %>
         <tr class="due-row" style="border-bottom: 1px solid #f1f5f9; transition: all 0.2s;">
             <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;"><%=serialNo%></td>
+            <td class="no-print" style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem; text-align:center;">
+                <input type="checkbox" class="approve-chk" data-kind="due" data-due-collection-id="<%=dueCollectionId%>" onchange="approveBill(this)" <%=dueIsApproved == 1 ? "checked disabled" : ""%>>
+            </td>
             <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;"><%=billDisplay%></td>
             <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;">
                 <a href="<%=contextPath%>/billing/print.jsp?billNo=<%=billDisplay%>" target="_blank" style="color:#2563eb; text-decoration:none; font-weight:500;"><%=cusName%></a>
@@ -198,9 +242,6 @@ String contextPath = request.getContextPath();
             <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;"><%=date%></td>
             <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;"><%=time%></td>
             <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;"><%=userName%></td>
-            <td class="no-print" style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem; text-align:center;">
-                <input type="checkbox" class="approve-chk" data-kind="due" data-due-collection-id="<%=dueCollectionId%>" onchange="approveBill(this)" <%=dueIsApproved == 1 ? "checked disabled" : ""%>>
-            </td>
         </tr>
         <% } %>
         <tr style="background: #f7fafc; border-top: 2px solid #4a5568;">

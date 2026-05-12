@@ -16,242 +16,359 @@
                 <title>Billing - Billing App</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
                 <jsp:include page="/assets/common/head.jsp" />
-                <style>
-/* ====== Billing Page – Professional Mobile-Friendly Design ====== */
+                                <style>
+/* Flexible billing layout without fixed pixel sizing */
 body { background: #f0edf7 !important; }
-.billing-content { padding: 8px 10px; display: flex; flex-direction: column; gap: 10px; }
 
-/* Cards */
+body.billing-page-body {
+    min-block-size: 100svh;
+    block-size: 100svh;
+    overflow: hidden !important;
+}
+
+.billing-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.6rem 0.8rem;
+    block-size: 100%;
+    min-block-size: 0;
+    overflow: auto;
+}
+
 .b-card {
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 2px 14px rgba(87,10,87,0.09);
-  padding: 14px 16px;
+    background: #fff;
+    border-radius: 0.9rem;
+    box-shadow: 0 0.15rem 0.9rem rgba(87, 10, 87, 0.09);
+    padding: clamp(0.75rem, 1.2vw, 1rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
 }
+
 .b-card-header {
-  font-size: 0.68rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.8px;
-  color: #570a57;
-  margin-bottom: 12px;
-  border-bottom: 2px solid #f3e8f8;
-  padding-bottom: 7px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.11em;
+    color: #570a57;
+    margin-bottom: 0.6rem;
+    border-bottom: 0.12rem solid #f3e8f8;
+    padding-bottom: 0.4rem;
 }
 
-/* Floating label inputs */
-.fl-input { position: relative; }
+.fl-input {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.field-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #570a57;
+    margin: 0;
+    text-transform: uppercase;
+}
+
 .fl-input input,
-.fl-input input.form-control {
-  height: 50px;
-  border-radius: 10px;
-  border: 1.5px solid #c9b4d6 !important;
-  background: #faf8fc !important;
-  padding: 18px 12px 6px !important;
-  font-size: 0.88rem;
-  width: 100%;
-  color: #2d1445;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  box-shadow: none !important;
-}
-.fl-input input:focus,
-.fl-input input.form-control:focus {
-  border-color: #570a57 !important;
-  box-shadow: 0 0 0 3px rgba(87,10,87,0.12) !important;
-  outline: none;
-}
-.fl-input label {
-  position: absolute;
-  top: 50%;
-  left: 13px;
-  transform: translateY(-50%);
-  font-size: 0.82rem;
-  color: #999;
-  pointer-events: none;
-  transition: all 0.18s;
-  background: transparent;
-  padding: 0 2px;
-  margin: 0;
-}
-.fl-input input:focus ~ label,
-.fl-input input:not(:placeholder-shown) ~ label {
-  top: 6px;
-  transform: none;
-  font-size: 0.6rem;
-  color: #570a57;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
-
-/* Bill Table */
-.billing-table-wrap { border-radius: 14px; overflow: hidden; border: 1.5px solid #ede0f5; }
-.bill-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.78rem;
-  background: #fff;
-  margin: 0;
-}
-.bill-table thead tr { background: linear-gradient(135deg, #3d1a52, #570a57); }
-.bill-table thead th {
-  color: #fff !important;
-  font-weight: 600;
-  font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  padding: 10px 8px;
-  border: none !important;
-  background: transparent !important;
-}
-.bill-table tbody tr { border-bottom: 1px solid #f0e8f5; }
-.bill-table tbody tr:hover { background: #faf5ff; }
-.bill-table tbody td {
-  padding: 7px 8px;
-  color: #2d1445;
-  vertical-align: middle;
-  border: none;
-  border-bottom: 1px solid #f0e8f5;
-}
-.bill-table tbody .empty-row td { color: transparent; height: 34px; pointer-events: none; }
-
-/* Totals grid */
-.total-box {
-  background: #faf5ff;
-  border-radius: 10px;
-  padding: 8px 10px;
-  text-align: center;
-  border: 1.5px solid #e8d5f0;
-  height: 100%;
-}
-.total-label {
-  font-size: 0.6rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: #999;
-  margin-bottom: 3px;
-}
-.total-val {
-  border: none;
-  background: transparent;
-  text-align: center;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #570a57;
-  width: 100%;
-  padding: 0;
-  outline: none;
-}
-.payable-box { background: linear-gradient(135deg, #3d1a52, #570a57); border-color: #570a57; }
-.payable-box .total-label { color: #ddc8ff; }
-.payable-box .total-val { color: #fff; font-size: 1.2rem; }
-
-/* Payment inputs/selects in payment section */
-.pay-label {
-  font-size: 0.6rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: #999;
-  display: block;
-  margin-bottom: 4px;
-}
+.fl-input input.form-control,
 .pay-select.form-select,
 .pay-select.form-control {
-  height: 50px;
-  border-radius: 10px;
-  border: 1.5px solid #c9b4d6 !important;
-  background: #faf8fc;
-  font-size: 0.85rem;
-  color: #2d1445;
-  padding: 12px 10px;
+    min-block-size: 3rem;
+    inline-size: 100%;
+    border-radius: 0.65rem;
+    border: 0.1rem solid #c9b4d6 !important;
+    background: #faf8fc !important;
+    padding: 0.65rem 0.75rem !important;
+    font-size: 0.9rem;
+    color: #2d1445;
+    box-shadow: none !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
+
+.fl-input input:focus,
+.fl-input input.form-control:focus,
 .pay-select.form-select:focus,
 .pay-select.form-control:focus {
-  border-color: #570a57 !important;
-  box-shadow: 0 0 0 3px rgba(87,10,87,0.12) !important;
+    border-color: #570a57 !important;
+    box-shadow: 0 0 0 0.2rem rgba(87, 10, 87, 0.12) !important;
+    outline: none;
 }
 
-/* Action buttons */
-.btn-save  { background: linear-gradient(135deg, #1e7e34, #28a745) !important; color: #fff !important; font-weight: 700; font-size: 0.83rem; height: 50px; border-radius: 10px; border: none !important; letter-spacing: 0.4px; }
-.btn-save:hover  { background: linear-gradient(135deg, #155724, #1e7e34) !important; transform: translateY(-1px); box-shadow: 0 5px 14px rgba(40,167,69,0.35) !important; }
-.btn-print { background: linear-gradient(135deg, #0a58ca, #0d6efd) !important; color: #fff !important; font-weight: 700; font-size: 0.83rem; height: 50px; border-radius: 10px; border: none !important; }
-.btn-print:hover { transform: translateY(-1px); box-shadow: 0 5px 14px rgba(13,110,253,0.35) !important; color: #fff !important; }
-.btn-new  { background: linear-gradient(135deg, #e06c0d, #fd7e14) !important; color: #fff !important; font-weight: 700; font-size: 0.83rem; height: 50px; border-radius: 10px; border: none !important; }
-.btn-new:hover  { transform: translateY(-1px); box-shadow: 0 5px 14px rgba(253,126,20,0.35) !important; color: #fff !important; }
-.btn-dup  { background: linear-gradient(135deg, #495057, #6c757d) !important; color: #fff !important; font-weight: 700; font-size: 0.83rem; height: 50px; border-radius: 10px; border: none !important; }
-.btn-dup:hover  { transform: translateY(-1px); box-shadow: 0 5px 14px rgba(108,117,125,0.35) !important; color: #fff !important; }
-.btn-add  { background: linear-gradient(135deg, #3d1a52, #570a57) !important; color: #fff !important; font-weight: 700; font-size: 0.83rem; height: 50px; border-radius: 10px; border: none !important; }
-.btn-add:hover  { transform: translateY(-1px); box-shadow: 0 5px 14px rgba(87,10,87,0.4) !important; color: #fff !important; }
+.billing-table-wrap {
+    border-radius: 0.9rem;
+    overflow: auto;
+    border: 0.1rem solid #ede0f5;
+    display: flex;
+}
 
-/* Bill number box */
+.bill-table {
+    inline-size: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    background: #fff;
+    margin: 0;
+}
+
+.bill-table thead tr { background: linear-gradient(135deg, #3d1a52, #570a57); }
+
+.bill-table thead th {
+    color: #fff !important;
+    font-weight: 600;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.65rem 0.5rem;
+    border: none !important;
+    background: transparent !important;
+}
+
+.bill-table tbody tr { border-bottom: 0.06rem solid #f0e8f5; }
+.bill-table tbody tr:hover { background: #faf5ff; }
+
+.bill-table tbody td {
+    padding: 0.5rem;
+    color: #2d1445;
+    vertical-align: middle;
+    border: none;
+    border-bottom: 0.06rem solid #f0e8f5;
+}
+
+.bill-table tbody .empty-row td {
+    color: transparent;
+    min-block-size: 2.1rem;
+    pointer-events: none;
+}
+
+.total-box {
+    background: #faf5ff;
+    border-radius: 0.65rem;
+    padding: 0.28rem 0.45rem;
+    text-align: center;
+    border: 0.1rem solid #e8d5f0;
+    block-size: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.05rem;
+}
+
+.totals-row .total-box {
+    min-block-size: 4rem;
+}
+
+.total-label,
+.pay-label {
+    font-size: 0.58rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #999;
+    margin-bottom: 0;
+    display: block;
+}
+
+.total-val {
+    border: none;
+    background: transparent;
+    text-align: center;
+    font-size: clamp(0.85rem, 1.25vw, 1rem);
+    font-weight: 700;
+    color: #570a57;
+    inline-size: 100%;
+    padding: 0;
+    outline: none;
+}
+
+.payable-box { background: linear-gradient(135deg, #3d1a52, #570a57); border-color: #570a57; }
+.payable-box .total-label { color: #ddc8ff; }
+.payable-box .total-val { color: #fff; font-size: clamp(0.92rem, 1.4vw, 1.08rem); }
+
+.btn-save,
+.btn-print,
+.btn-new,
+.btn-dup,
+.btn-add {
+    min-block-size: 3rem;
+    inline-size: 100%;
+    border-radius: 0.65rem;
+    border: none !important;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-save { background: linear-gradient(135deg, #1e7e34, #28a745) !important; color: #fff !important; }
+.btn-print { background: linear-gradient(135deg, #0a58ca, #0d6efd) !important; color: #fff !important; }
+.btn-new { background: linear-gradient(135deg, #e06c0d, #fd7e14) !important; color: #fff !important; }
+.btn-dup { background: linear-gradient(135deg, #495057, #6c757d) !important; color: #fff !important; }
+.btn-add { background: linear-gradient(135deg, #3d1a52, #570a57) !important; color: #fff !important; }
+
+.btn-save:hover,
+.btn-print:hover,
+.btn-new:hover,
+.btn-dup:hover,
+.btn-add:hover {
+    transform: translateY(-0.08rem);
+}
+
+.btn-save:hover { box-shadow: 0 0.35rem 0.95rem rgba(40, 167, 69, 0.35) !important; }
+.btn-print:hover { box-shadow: 0 0.35rem 0.95rem rgba(13, 110, 253, 0.35) !important; }
+.btn-new:hover { box-shadow: 0 0.35rem 0.95rem rgba(253, 126, 20, 0.35) !important; }
+.btn-dup:hover { box-shadow: 0 0.35rem 0.95rem rgba(108, 117, 125, 0.35) !important; }
+.btn-add:hover { box-shadow: 0 0.35rem 0.95rem rgba(87, 10, 87, 0.4) !important; }
+
 .bill-no-box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 50px;
-  padding: 0 18px;
-  background: #faf5ff;
-  border-radius: 10px;
-  border: 1.5px solid #e8d5f0;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #570a57;
-  min-width: 100px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: 3rem;
+    padding-inline: 0.9rem;
+    background: #faf5ff;
+    border-radius: 0.65rem;
+    border: 0.1rem solid #e8d5f0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #570a57;
 }
 
-/* Exchange point banner */
 .ex-banner {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  background: #d4edda;
-  border-radius: 10px;
-  padding: 10px 14px;
-  font-size: 0.82rem;
-  color: #155724;
-  margin-top: 10px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    background: #d4edda;
+    border-radius: 0.65rem;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.84rem;
+    color: #155724;
+    margin-top: 0.65rem;
 }
-.ex-banner .btn-ex { background: #28a745; color: #fff; padding: 5px 12px; border-radius: 7px; font-size: 0.75rem; border: none; cursor: pointer; font-weight: 600; }
-.ex-banner .btn-ex-close { margin-left: auto; background: none; border: none; font-size: 1rem; cursor: pointer; color: #155724; line-height: 1; }
 
-/* Divider label between totals & payment */
+.ex-banner .btn-ex {
+    background: #28a745;
+    color: #fff;
+    padding: 0.35rem 0.8rem;
+    border-radius: 0.45rem;
+    font-size: 0.78rem;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.ex-banner .btn-ex-close {
+    margin-inline-start: auto;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #155724;
+    line-height: 1;
+}
+
 .section-divider {
-  font-size: 0.62rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: #bbb;
-  margin: 10px 0 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.section-divider::before, .section-divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: #eee;
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: #bbb;
+    margin: 0.65rem 0 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
 }
 
-/* Mobile tweaks */
-@media (max-width: 575px) {
-  .billing-content { padding: 6px; gap: 8px; }
-  .b-card { padding: 12px 12px; border-radius: 12px; }
-  .fl-input input, .fl-input input.form-control { height: 48px; font-size: 0.85rem; }
-  .pay-select.form-select { height: 48px; }
-  .btn-save, .btn-print, .btn-new, .btn-dup, .btn-add { height: 48px; font-size: 0.8rem; }
-  .bill-table { font-size: 0.72rem; }
-  .bill-table thead th { padding: 8px 5px; font-size: 0.62rem; }
-  .bill-table tbody td { padding: 6px 5px; }
-  .total-val { font-size: 0.9rem; }
-  .payable-box .total-val { font-size: 1.05rem; }
+.section-divider::before,
+.section-divider::after {
+    content: '';
+    flex: 1;
+    block-size: 0.06rem;
+    background: #eee;
 }
-                </style>
+
+@media (max-width: 48em) {
+    .billing-content {
+        padding: 0.5rem;
+        gap: 0.6rem;
+        block-size: 100%;
+    }
+
+    .bill-table { font-size: 0.74rem; }
+    .bill-table thead th { font-size: 0.64rem; }
+    .total-val { font-size: clamp(0.9rem, 2.8vw, 1.05rem); }
+}
+
+/* Large desktop tuning (24-inch and above) */
+@media (min-width: 100em) {
+    .billing-content {
+        padding: 1rem 1.2rem;
+        gap: 1rem;
+    }
+
+    .b-card {
+        padding: 1.05rem 1.2rem;
+        border-radius: 1rem;
+    }
+
+    .b-card-header {
+        font-size: 0.82rem;
+    }
+
+    .fl-input input,
+    .fl-input input.form-control,
+    .pay-select.form-select,
+    .pay-select.form-control {
+        min-block-size: 3.35rem;
+        font-size: 1rem;
+    }
+
+    .field-label,
+    .pay-label,
+    .total-label {
+        font-size: 0.62rem;
+    }
+
+    .bill-table {
+        font-size: 0.9rem;
+    }
+
+    .bill-table thead th {
+        font-size: 0.78rem;
+    }
+
+    .bill-table tbody td {
+        padding: 0.62rem;
+    }
+
+    .total-val {
+        font-size: clamp(0.92rem, 0.95vw, 1.06rem);
+    }
+
+    .payable-box .total-val {
+        font-size: clamp(0.98rem, 1.05vw, 1.15rem);
+    }
+
+    .btn-save,
+    .btn-print,
+    .btn-new,
+    .btn-dup,
+    .btn-add {
+        min-block-size: 3.35rem;
+        font-size: 0.95rem;
+    }
+
+    .bill-no-box {
+        min-block-size: 3.35rem;
+        font-size: 1.08rem;
+    }
+}
+                                </style>
             </head>
 
 <body class="billing-page-body">
@@ -266,8 +383,8 @@ body { background: #f0edf7 !important; }
             <div class="row g-3">
                 <div class="col-12 col-sm-6">
                     <div class="fl-input">
-                        <input type="text" id="customerName" class="form-control" placeholder=" " autocomplete="off">
-                        <label>Customer Name</label>
+                        <label class="field-label" for="customerName">Customer Name</label>
+                        <input type="text" id="customerName" class="form-control" autocomplete="off">
                         <input type="hidden" id="customerId" value="0">
                         <input type="hidden" id="customerCreditLimit" value="0">
                         <input type="hidden" id="customerExchangePoint" value="0">
@@ -276,8 +393,8 @@ body { background: #f0edf7 !important; }
                 </div>
                 <div class="col-12 col-sm-6">
                     <div class="fl-input">
-                        <input type="text" id="customerPhn" class="form-control" placeholder=" " autocomplete="off">
-                        <label>Phone Number</label>
+                        <label class="field-label" for="customerPhn">Phone Number</label>
+                        <input type="text" id="customerPhn" class="form-control" autocomplete="off">
                     </div>
                 </div>
             </div>
@@ -307,29 +424,29 @@ body { background: #f0edf7 !important; }
                 <input type="hidden" id="productConvertionUnit" value="">
                 <input type="text" id="productDiscount" class="form-control only-numbers" placeholder="" value="0" oninput="setDefaultValue(this);">
             </div>
-            <div class="row g-2 align-items-end">
+            <div class="row g-2 align-items-start">
                 <div class="col-12 col-sm-5 col-md-4">
                     <div class="fl-input">
-                        <input type="text" id="productName" name="productName" class="form-control" placeholder=" ">
-                        <label>Item Name</label>
+                        <label class="field-label" for="productName">Item Name</label>
+                        <input type="text" id="productName" name="productName" class="form-control">
                     </div>
                 </div>
                 <div class="col-4 col-sm-2">
                     <div class="fl-input">
-                        <input type="number" id="productQty" class="form-control" placeholder=" " value="1" min="1">
-                        <label id="qtyLabel">Qty</label>
+                        <label class="field-label" id="qtyLabel" for="productQty">Qty</label>
+                        <input type="number" id="productQty" class="form-control" value="1" min="1">
                     </div>
                 </div>
                 <div class="col-4 col-sm-2">
                     <div class="fl-input">
-                        <input type="number" id="productPrice" class="form-control" placeholder=" " min="0">
-                        <label>Price</label>
+                        <label class="field-label" for="productPrice">Price</label>
+                        <input type="number" id="productPrice" class="form-control" min="0">
                     </div>
                 </div>
                 <div class="col-4 col-sm-2">
                     <div class="fl-input">
-                        <input type="text" id="productCourierFee" class="form-control only-numbers" placeholder=" " value="0" oninput="setDefaultValue(this);">
-                        <label>Courier</label>
+                        <label class="field-label" for="productCourierFee">Courier</label>
+                        <input type="text" id="productCourierFee" class="form-control only-numbers" value="0" oninput="setDefaultValue(this);">
                     </div>
                 </div>
                 <div class="col-12 col-sm-1 col-md-2" style="display:none;">
@@ -372,7 +489,7 @@ body { background: #f0edf7 !important; }
         <div class="b-card">
 
             <!-- Totals Row -->
-            <div class="row g-2 mb-1">
+            <div class="row g-2 mb-1 totals-row">
                 <div class="col-6 col-sm-3 col-lg">
                     <div class="total-box">
                         <div class="total-label">Price Total</div>
@@ -407,7 +524,6 @@ body { background: #f0edf7 !important; }
             </div>
 
             <!-- Payment Section -->
-            <div class="section-divider">Payment</div>
             <div class="row g-2 mb-2">
                 <div class="col-6 col-md-4 col-lg">
                     <label class="pay-label">Payment Mode</label>
@@ -442,7 +558,7 @@ body { background: #f0edf7 !important; }
             </div>
 
             <!-- Action Buttons -->
-            <div class="section-divider">Actions</div>
+
             <div class="row g-2">
                 <div class="col-6 col-md col-lg">
                     <button id="saveBillBtn" class="btn btn-save w-100" onclick="saveBill()">

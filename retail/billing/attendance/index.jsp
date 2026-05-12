@@ -34,11 +34,36 @@ if (!permissions.contains(10)) {
     <title>Attendance Entry</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <jsp:include page="/assets/common/head.jsp" />
+    <style>
+        .attendance-entry-wrap .card-header h5 {
+            font-size: 1.35rem;
+            font-weight: 700;
+        }
+        .attendance-entry-wrap .card-body,
+        .attendance-entry-wrap .card-body p,
+        .attendance-entry-wrap .alert {
+            font-size: 1.12rem;
+        }
+        .attendance-entry-wrap .btn {
+            font-size: 1.12rem;
+        }
+        @media (max-width: 768px) {
+            .attendance-entry-wrap .card-header h5 {
+                font-size: 1.18rem;
+            }
+            .attendance-entry-wrap .card-body,
+            .attendance-entry-wrap .card-body p,
+            .attendance-entry-wrap .alert,
+            .attendance-entry-wrap .btn {
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
 <jsp:include page="/assets/navbar/navbar.jsp" />
 
-<div class="container mt-5">
+<div class="container mt-5 attendance-entry-wrap">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow">

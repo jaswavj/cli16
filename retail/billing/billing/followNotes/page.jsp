@@ -51,10 +51,33 @@
         .badge-open  { background: #ff9800; color: #fff; padding: 3px 8px; border-radius: 10px; font-size: 0.78rem; }
         .badge-closed{ background: #4caf50; color: #fff; padding: 3px 8px; border-radius: 10px; font-size: 0.78rem; }
 
-        .page-title { font-size: 1.4rem; font-weight: 700; color: #3d3d3d; }
+        .page-title { font-size: 1.6rem; font-weight: 700; color: #3d3d3d; }
         .card { border: none; border-radius: 12px; }
         .card-header { background: linear-gradient(135deg, #f7fafc, #edf2f7); border-radius: 12px 12px 0 0 !important; border-bottom: 1px solid #e2e8f0; padding: 0.85rem 1rem; }
-        .table thead th { font-weight: 600; color: #4a5568; font-size: 0.83rem; }
+        .card-header,
+        .card-header .fw-semibold { font-size: 1.14rem; }
+        .form-label,
+        .form-control,
+        .form-select,
+        .btn,
+        .btn-sm { font-size: 1.08rem; }
+        .table thead th { font-weight: 600; color: #4a5568; font-size: 1.02rem; }
+        .table tbody td { font-size: 1.02rem; }
+        .autocomplete-list li { font-size: 1rem; }
+        .badge-open,
+        .badge-closed { font-size: 0.92rem; }
+        @media (max-width: 768px) {
+            .page-title { font-size: 1.3rem; }
+            .card-header,
+            .card-header .fw-semibold,
+            .form-label,
+            .form-control,
+            .form-select,
+            .btn,
+            .btn-sm,
+            .table thead th,
+            .table tbody td { font-size: 0.98rem; }
+        }
     </style>
 </head>
 <body>
