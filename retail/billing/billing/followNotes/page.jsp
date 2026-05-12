@@ -364,7 +364,7 @@ function renderNotes(notes) {
             <td class="text-muted small">${i + 1}</td>
             <td><b>${escHtml(n.customerName)}</b></td>
             <td>${waLink}</td>
-            <td style="max-width:320px; white-space:pre-wrap;">${escHtml(n.description)}</td>
+            <td style="max-width:320px; white-space:pre-wrap; color:#dc3545; font-weight:700;">${escHtml(n.description)}</td>
             <td class="text-nowrap small">${escHtml(n.dateTime || '')}</td>
             <td class="small">${escHtml(n.addedBy || '')}</td>
             <td>${statusBadge}</td>

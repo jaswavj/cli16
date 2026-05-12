@@ -16,7 +16,7 @@ for (int i = 0; i < vecPer.size(); i++) {
     permissions.add(modId);
 }
 
-if (!permissions.contains(13)) {
+if (!permissions.contains(2)) {
 %>
 <!DOCTYPE html>
 <html>

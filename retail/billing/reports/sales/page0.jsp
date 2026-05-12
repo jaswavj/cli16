@@ -48,8 +48,8 @@ String contextPath = request.getContextPath();
 <p ><strong>Collection Report From:</strong> <%= fromDate %> - <%= toDate %></p>
     <div class="mb-3 no-print">
         <a href="<%=contextPath%>/reports/sales/page.jsp" class="btn btn-secondary btn-sm me-2">⬅ Back</a>
-        <button class="btn btn-primary btn-sm" onclick="printReport()">🖨 Print</button>
-        <button class="btn btn-success btn-sm" onclick="exportTableToExcel('printTable', 'Sales_Report')">📊 Export to Excel</button>
+        <button id="printBtn" class="btn btn-primary btn-sm" onclick="printReport()" disabled>🖨 Print</button>
+        <button id="exportBtn" class="btn btn-success btn-sm" onclick="exportTableToExcel('printTable', 'Sales_Report')" disabled>📊 Export to Excel</button>
     </div>
 <div class="table-responsive">
 <table id="printTable" class="table table-hover mb-0" style="border-collapse: separate; border-spacing: 0; font-size: 12px;">
@@ -68,6 +68,7 @@ String contextPath = request.getContextPath();
             <th style="padding: 0.4rem; font-weight: 600; color: #4a5568; border: none; font-size: 0.85rem;">Date</th>
             <th style="padding: 0.4rem; font-weight: 600; color: #4a5568; border: none; font-size: 0.85rem;">Time</th>
             <th style="padding: 0.4rem; font-weight: 600; color: #4a5568; border: none; font-size: 0.85rem;">Staff</th>
+            <th class="no-print" style="padding: 0.4rem; font-weight: 600; color: #4a5568; border: none; font-size: 0.85rem; text-align:center;">Approved</th>
             
         </tr>
     </thead>
@@ -83,6 +84,7 @@ String contextPath = request.getContextPath();
 		{
             Vector row		= (Vector)vec.elementAt(i);
             int billId		= Integer.parseInt(row.elementAt(8).toString());  
+            int isApproved = bill.getBillApprovalStatus(billId);
             double paid        = Double.parseDouble(row.elementAt(4).toString());
             double Balance       = Double.parseDouble(row.elementAt(12).toString());
             String billNo    = row.elementAt(0).toString();
@@ -134,7 +136,9 @@ String contextPath = request.getContextPath();
             <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;"><%=row.elementAt(5)%></td>
             <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;"><%=row.elementAt(6)%></td>
             <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;"><%=row.elementAt(7)%></td>
-            
+            <td class="no-print" style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem; text-align:center;">
+                <input type="checkbox" class="approve-chk" data-bill-id="<%=billId%>" onchange="approveBill(this)" <%=isApproved == 1 ? "checked disabled" : ""%>>
+            </td>
         </tr>
         <%
         }
@@ -149,21 +153,15 @@ String contextPath = request.getContextPath();
             String time        = row.elementAt(7).toString();
             String userName    = row.elementAt(8).toString();
             String billDisplay = row.elementAt(9).toString();
-            int dueBillId      = Integer.parseInt(row.elementAt(10).toString());
+            int dueCollectionId = Integer.parseInt(row.elementAt(11).toString());
+            int dueIsApproved  = Integer.parseInt(row.elementAt(12).toString());
+            double finalDueBalance = 0.0;
+            try { finalDueBalance = Double.parseDouble(row.elementAt(13).toString()); } catch (Exception e) { finalDueBalance = 0.0; }
             String cusPhone    = bill.getCusNumber(billDisplay);
 
             double cashPaid = Double.parseDouble(row.elementAt(2).toString());
             double bankPaid = Double.parseDouble(row.elementAt(3).toString());
             double totalPaid = cashPaid + bankPaid;
-
-            Vector billAmount = bill.getBillAmount(dueBillId);
-            double billTotal = 0.0;
-            double alreadyPaid = 0.0;
-            if (billAmount != null && billAmount.size() >= 2) {
-                try { billTotal = Double.parseDouble(String.valueOf(billAmount.elementAt(0))); } catch (Exception e) { billTotal = 0.0; }
-                try { alreadyPaid = Double.parseDouble(String.valueOf(billAmount.elementAt(1))); } catch (Exception e) { alreadyPaid = 0.0; }
-            }
-            double balance = billTotal - (alreadyPaid + totalPaid);
 
             Vector dueItemDetails = bill.getBillDetailsUsingNo(billDisplay);
             String dueItemName = "-";
@@ -175,7 +173,7 @@ String contextPath = request.getContextPath();
             }
 
             finPaid += totalPaid;
-            finBalance += balance;
+            finBalance += finalDueBalance;
             serialNo++;
         %>
         <tr class="due-row" style="border-bottom: 1px solid #f1f5f9; transition: all 0.2s;">
@@ -196,20 +194,22 @@ String contextPath = request.getContextPath();
             <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;">0.0</td>
             <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;">0.0</td>
             <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;"><%=String.format("%.1f", totalPaid)%></td>
-            <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;"><%=String.format("%.1f", balance)%></td>
+            <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;"><%=String.format("%.1f", finalDueBalance)%></td>
             <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;"><%=date%></td>
             <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;"><%=time%></td>
             <td style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem;"><%=userName%></td>
+            <td class="no-print" style="padding: 0.4rem; color: #718096; border: none; font-size: 0.9rem; text-align:center;">
+                <input type="checkbox" class="approve-chk" data-kind="due" data-due-collection-id="<%=dueCollectionId%>" onchange="approveBill(this)" <%=dueIsApproved == 1 ? "checked disabled" : ""%>>
+            </td>
         </tr>
         <% } %>
         <tr style="background: #f7fafc; border-top: 2px solid #4a5568;">
-            <td colspan="5" style="padding: 0.4rem; font-weight: 600; color: #4a5568; border: none; font-size: 0.9rem;"><strong>Grand Total</strong></td>
+            <td colspan="6" style="padding: 0.4rem; font-weight: 600; color: #4a5568; border: none; font-size: 0.9rem;"><strong>Grand Total</strong></td>
             <td style="padding: 0.4rem; font-weight: 600; color: #4a5568; border: none; font-size: 0.9rem;"><strong><%=String.format("%.1f", finPrice)%></strong></td>
             <td style="padding: 0.4rem; font-weight: 600; color: #4a5568; border: none; font-size: 0.9rem;"><strong><%=String.format("%.1f", finCourier)%></strong></td>
             <td style="padding: 0.4rem; font-weight: 600; color: #4a5568; border: none; font-size: 0.9rem;"><strong><%=String.format("%.1f", finTotal)%></strong></td>
             <td style="padding: 0.4rem; font-weight: 600; color: #4a5568; border: none; font-size: 0.9rem;"><strong><%=String.format("%.1f", finPaid)%></strong></td>
             <td style="padding: 0.4rem; font-weight: 600; color: #4a5568; border: none; font-size: 0.9rem;"><strong><%//=String.format("%.1f", finBalance)%></strong></td>
-            <td style="padding: 0.4rem; border: none;"></td>
             <td style="padding: 0.4rem; border: none;"></td>
             <td style="padding: 0.4rem; border: none;"></td>
             <td style="padding: 0.4rem; border: none;"></td>
@@ -297,6 +297,8 @@ String contextPath = request.getContextPath();
 </style>
 
 <script>
+const reportReloadUrl = '<%=contextPath%>/reports/sales/page0.jsp?fromDate=<%=fromDate%>&toDate=<%=toDate%>&mode=<%=modeId%>&type=<%=typeId%>&userId=<%=userId%>';
+
 // Toast notification function
 function showToast(message, type = 'success') {
     const toastColors = {
@@ -355,6 +357,77 @@ function directPrint(billNo) {
             showToast('✗ Print failed: ' + error.message, 'error');
         });
 }
+
+function updateActionButtons() {
+    const checkboxes = document.querySelectorAll('.approve-chk');
+    const printBtn = document.getElementById('printBtn');
+    const exportBtn = document.getElementById('exportBtn');
+    let allApproved = true;
+
+    if (checkboxes.length > 0) {
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (!checkboxes[i].checked) {
+                allApproved = false;
+                break;
+            }
+        }
+    }
+
+    printBtn.disabled = !allApproved;
+    exportBtn.disabled = !allApproved;
+}
+
+function approveBill(checkbox) {
+    if (!checkbox.checked) {
+        updateActionButtons();
+        return;
+    }
+
+    const billId = checkbox.getAttribute('data-bill-id');
+    const kind = checkbox.getAttribute('data-kind') === 'due' ? 'due' : 'bill';
+    const dueCollectionId = checkbox.getAttribute('data-due-collection-id');
+    checkbox.disabled = true;
+
+    let requestBody = 'kind=' + encodeURIComponent(kind);
+    if (kind === 'due') {
+        requestBody += '&dueCollectionId=' + encodeURIComponent(dueCollectionId || '');
+    } else {
+        requestBody += '&billId=' + encodeURIComponent(billId || '');
+    }
+
+    fetch('<%=contextPath%>/reports/sales/updateBillApproval.jsp', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: requestBody
+    })
+    .then(response => response.text())
+    .then(data => {
+        const result = data.trim();
+        if (result === 'OK') {
+            showToast('Approval saved', 'success');
+            window.location.href = reportReloadUrl;
+        } else {
+            checkbox.checked = false;
+            checkbox.disabled = false;
+            showToast(result, 'error');
+            window.location.href = reportReloadUrl;
+        }
+        updateActionButtons();
+    })
+    .catch(error => {
+        checkbox.checked = false;
+        checkbox.disabled = false;
+        showToast('Failed to save approval: ' + error.message, 'error');
+        window.location.href = reportReloadUrl;
+        updateActionButtons();
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    updateActionButtons();
+});
 
 function printReport() {
     // Create print area
