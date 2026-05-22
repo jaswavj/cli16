@@ -849,5 +849,24 @@ Vector initialPayment = bill.getInitialBillPayment(billNo);
 
 </div>
 
+<div style="
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    margin: 3px 0 0 0;
+    padding: 4px 6px;
+    border-top: 1px solid rgba(11,122,68,0.2);
+    opacity: 0.55;
+">
+    <span style="font-family: Arial, sans-serif; font-size: 8.5px; color: #1e5a3c; letter-spacing: 0.4px; font-weight: 600;">
+        Powered by <strong style="font-size: 9px; letter-spacing: 0.8px;">JASXBILL</strong>
+        <span style="margin: 0 4px; color: #999;">&mdash;</span>
+        <span style="font-weight: 400; color: #444;">Smart Billing Software</span>
+        <span style="margin: 0 5px; color: #bbb;">&bull;</span>
+        <span style="color: #333;">8667214152</span>
+    </span>
+</div>
+
 </body>
 </html>
