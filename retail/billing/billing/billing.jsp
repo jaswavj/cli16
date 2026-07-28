@@ -177,10 +177,6 @@ body.billing-page-body {
     overflow: visible;
 }
 
-.customer-fields-row {
-    overflow: visible;
-}
-
 .pos-panel-head {
     display: flex;
     align-items: center;
@@ -299,8 +295,22 @@ body.billing-page-body {
 /* Fluid field grids */
 .customer-fields-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    grid-template-columns: 1fr;
     gap: var(--pos-gap);
+    overflow: visible;
+}
+
+@media (min-width: 640px) {
+    .customer-fields-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1100px) {
+    .customer-fields-row {
+        grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+        align-items: start;
+    }
 }
 
 .item-fields-row {
@@ -466,6 +476,14 @@ body.billing-page-body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
     gap: clamp(8px, 1vw, 14px);
+}
+
+.field-hint {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.72rem;
+    color: #64748b;
+    line-height: 1.2;
 }
 
 /* Action buttons — full width row at bottom */
@@ -655,6 +673,16 @@ body.billing-page-body {
                             <div class="fl-input">
                                 <label class="field-label" for="customerPhn">Phone Number</label>
                                 <input type="text" id="customerPhn" class="form-control" autocomplete="off" placeholder="Enter phone">
+                            </div>
+                            <div class="fl-input">
+                                <label class="field-label" for="billDate">Bill Date</label>
+                                <input type="date" id="billDate" class="form-control">
+                                <span class="field-hint">Empty = today</span>
+                            </div>
+                            <div class="fl-input">
+                                <label class="field-label" for="billTime">Bill Time</label>
+                                <input type="time" id="billTime" class="form-control" step="1">
+                                <span class="field-hint">Empty = now</span>
                             </div>
                         </div>
                         <div id="exchangePointBanner" class="ex-banner d-none">

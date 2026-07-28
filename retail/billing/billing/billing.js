@@ -853,6 +853,8 @@ function saveBill() {
                 description,
                 deliveryDate,
                 isDownloaded,
+                billDate: document.getElementById('billDate').value.trim(),
+                billTime: document.getElementById('billTime').value.trim(),
                 customerPhn,
                 mode,
                 type,

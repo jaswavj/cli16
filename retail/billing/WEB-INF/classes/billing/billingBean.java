@@ -834,7 +834,7 @@ public String saveBillItems(List<ProductItem> items,
                          double payableAmount, double grandTotal,
                          int uid, double priceTotal, double discountTotal,String customerPhn
                          	,double totalPaid,double cashPaid,double bankPaid,int mode,int type,double balance,int customerId,int priceCategory,int attenderId,int isTaxBill,double courierFee) throws Exception {
-    return saveBillItems(items, customerName, finalDiscount, payableAmount, grandTotal, uid, priceTotal, discountTotal, customerPhn, totalPaid, cashPaid, bankPaid, mode, type, balance, customerId, priceCategory, attenderId, isTaxBill, courierFee, "", null, 0);
+    return saveBillItems(items, customerName, finalDiscount, payableAmount, grandTotal, uid, priceTotal, discountTotal, customerPhn, totalPaid, cashPaid, bankPaid, mode, type, balance, customerId, priceCategory, attenderId, isTaxBill, courierFee, "", null, 0, null, null);
 }
 
 public String saveBillItems(List<ProductItem> items,
@@ -842,6 +842,14 @@ public String saveBillItems(List<ProductItem> items,
                          double payableAmount, double grandTotal,
                          int uid, double priceTotal, double discountTotal,String customerPhn
                          	,double totalPaid,double cashPaid,double bankPaid,int mode,int type,double balance,int customerId,int priceCategory,int attenderId,int isTaxBill,double courierFee,String description,String deliveryDate,int isDownloaded) throws Exception {
+    return saveBillItems(items, customerName, finalDiscount, payableAmount, grandTotal, uid, priceTotal, discountTotal, customerPhn, totalPaid, cashPaid, bankPaid, mode, type, balance, customerId, priceCategory, attenderId, isTaxBill, courierFee, description, deliveryDate, isDownloaded, null, null);
+}
+
+public String saveBillItems(List<ProductItem> items,
+                         String customerName, double finalDiscount,
+                         double payableAmount, double grandTotal,
+                         int uid, double priceTotal, double discountTotal,String customerPhn
+                         	,double totalPaid,double cashPaid,double bankPaid,int mode,int type,double balance,int customerId,int priceCategory,int attenderId,int isTaxBill,double courierFee,String description,String deliveryDate,int isDownloaded,String billDate,String billTime) throws Exception {
     Connection con = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
@@ -881,9 +889,26 @@ public String saveBillItems(List<ProductItem> items,
         rs.close();
         ps.close();
 
-        
-           String sql = "INSERT INTO prod_bill (bill_display, total, extraDisc, payable, paid, uid, DATE, TIME, cusName, prodDisc, cusPhn, paymentMode, paymentType, balance, is_balance,currentBalance,customerId,price_category,attender_id,is_tax_bill,description,delivery_date,is_downloaded,download_date) " +
-               "VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW(), ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)";
+        java.sql.Date billSqlDate;
+        if (billDate != null && !billDate.trim().isEmpty()) {
+            billSqlDate = java.sql.Date.valueOf(billDate.trim());
+        } else {
+            billSqlDate = new java.sql.Date(System.currentTimeMillis());
+        }
+
+        java.sql.Time billSqlTime;
+        if (billTime != null && !billTime.trim().isEmpty()) {
+            String timeVal = billTime.trim();
+            if (timeVal.length() == 5) {
+                timeVal = timeVal + ":00";
+            }
+            billSqlTime = java.sql.Time.valueOf(timeVal);
+        } else {
+            billSqlTime = new java.sql.Time(System.currentTimeMillis());
+        }
+
+           String sql = "INSERT INTO prod_bill (bill_display, total, extraDisc, payable, paid, uid, DATE, TIME, cusName, prodDisc, cusPhn, paymentMode, paymentType, balance, is_balance,currentBalance,customerId,price_category,attender_id,is_tax_bill,description,delivery_date,is_downloaded,download_date,enter_date_time) " +
+               "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?, NOW())";
 
 ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
@@ -893,38 +918,40 @@ ps.setDouble(3, finalDiscount);
 ps.setDouble(4, payableAmount);
 ps.setDouble(5, totalPaid);
 ps.setInt(6, uid);
-ps.setString(7, customerName);
-ps.setDouble(8, discountTotal);
-ps.setString(9, customerPhn);
-ps.setInt(10, mode);
-ps.setInt(11, type);
-ps.setDouble(12, balance);
-
-ps.setInt(13, balance > 0 ? 1 : 0);
+ps.setDate(7, billSqlDate);
+ps.setTime(8, billSqlTime);
+ps.setString(9, customerName);
+ps.setDouble(10, discountTotal);
+ps.setString(11, customerPhn);
+ps.setInt(12, mode);
+ps.setInt(13, type);
 ps.setDouble(14, balance);
+
+ps.setInt(15, balance > 0 ? 1 : 0);
+ps.setDouble(16, balance);
 if (customerId > 0) {
-    ps.setInt(15, customerId);
-} else {
-    ps.setNull(15, java.sql.Types.INTEGER);
-}
-ps.setInt(16, priceCategory);
-if (attenderId > 0) {
-    ps.setInt(17, attenderId);
+    ps.setInt(17, customerId);
 } else {
     ps.setNull(17, java.sql.Types.INTEGER);
 }
-ps.setInt(18, isTaxBill);
-ps.setString(19, description);
-if (deliveryDate != null && !deliveryDate.trim().isEmpty()) {
-    ps.setDate(20, java.sql.Date.valueOf(deliveryDate));
+ps.setInt(18, priceCategory);
+if (attenderId > 0) {
+    ps.setInt(19, attenderId);
 } else {
-    ps.setNull(20, java.sql.Types.DATE);
+    ps.setNull(19, java.sql.Types.INTEGER);
 }
-ps.setInt(21, isDownloaded == 1 ? 1 : 0);
-if (isDownloaded == 1) {
-    ps.setDate(22, new java.sql.Date(System.currentTimeMillis()));
+ps.setInt(20, isTaxBill);
+ps.setString(21, description);
+if (deliveryDate != null && !deliveryDate.trim().isEmpty()) {
+    ps.setDate(22, java.sql.Date.valueOf(deliveryDate));
 } else {
     ps.setNull(22, java.sql.Types.DATE);
+}
+ps.setInt(23, isDownloaded == 1 ? 1 : 0);
+if (isDownloaded == 1) {
+    ps.setDate(24, new java.sql.Date(System.currentTimeMillis()));
+} else {
+    ps.setNull(24, java.sql.Types.DATE);
 }
 
 ps.executeUpdate();

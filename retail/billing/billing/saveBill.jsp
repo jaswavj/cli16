@@ -81,6 +81,8 @@ try {
         description = "";
     }
     String deliveryDate = request.getParameter("deliveryDate");
+    String billDate = request.getParameter("billDate");
+    String billTime = request.getParameter("billTime");
     int isDownloaded = 0;
     String isDownloadedStr = request.getParameter("isDownloaded");
     if (isDownloadedStr != null) {
@@ -200,7 +202,7 @@ try {
         productList.add(new ProductItem(productId, qty, price, discount, total, gst, cost, commission, lineCourierFee));
     }
 
-    String billDisplay = bill.saveBillItems(productList, customerName, finalDiscount, payableAmount, grandTotal, uid, priceTotal, discountTotal,customerPhn,totalPaid,cashPaid,bankPaid,mode,type,balance,customerId,priceCategory,attenderId,isTaxBill,courierFee,description,deliveryDate,isDownloaded);
+    String billDisplay = bill.saveBillItems(productList, customerName, finalDiscount, payableAmount, grandTotal, uid, priceTotal, discountTotal,customerPhn,totalPaid,cashPaid,bankPaid,mode,type,balance,customerId,priceCategory,attenderId,isTaxBill,courierFee,description,deliveryDate,isDownloaded,billDate,billTime);
     int billId = bill.getBillId(billDisplay);
     
     // Auto-allocate cheques for credit bills
