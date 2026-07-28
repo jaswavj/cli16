@@ -138,12 +138,12 @@ Vector initialPayment = bill.getInitialBillPayment(billNo);
         :root {
             --theme-primary: #0b7a44;
             --theme-border: #1e5a3c;
-            --theme-light: #eef7f1;
+            --theme-light: #ffffff;
         }
         @page { size: A4; margin: 5mm; }
         body {
             font-family: Arial, sans-serif;
-            font-size: 11px;
+            font-size: 13px;
             margin: 0;
             padding: 5px;
             color: #000;
@@ -155,17 +155,8 @@ Vector initialPayment = bill.getInitialBillPayment(billNo);
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             background: white;
         }
-        .header-title {
-            text-align: center;
-            font-weight: bold;
-            font-size: 16px;
-            margin-bottom: 8px;
-            color: var(--theme-primary);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
         
-        /* Grid Layout Helpers */
+        /* Grid layout helpers */
         .row { display: flex; width: 100%; }
         .col-50 { width: 50%; }
         .col-40 { width: 40%; }
@@ -180,51 +171,83 @@ Vector initialPayment = bill.getInitialBillPayment(billNo);
         .text-center { text-align: center; }
         .font-bold { font-weight: bold; }
         
-        /* Header Section */
-        .company-header {
-            display: flex;
+        /* Invoice header */
+        .invoice-header {
             border-bottom: 2px solid var(--theme-border);
-            background: var(--theme-light);
-            padding: 8px;
-            align-items: center;
+            background: #fff;
         }
-        /*.logo-area {
-            width: 150px;
-            height: 80px;
-            border-radius: 8px;
-            display: flex;
-            
-            
-        }*/
-
-        .logo-area img {
-            max-width: 200px;
-            max-height: 100px;
-            object-fit: contain;
-            margin-right: 20px;
-        }
-        .logo-area1 img {
-            max-width: 150px;
-            max-height: 80px;
-            object-fit: contain;
-            margin-right: 20px;
-        }
-        .company-details {
-            flex: 1;
-            color: #000;
-            font-size: 12px;
-            line-height: 1.6;
-        }
-        .company-name {
-            font-size: 22px;
-            font-weight: bold;
+        .invoice-header-top {
+            background: var(--theme-primary);
+            color: #fff;
+            text-align: center;
+            padding: 7px 16px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 4px;
             text-transform: uppercase;
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-            color: #000;
         }
-        .company-details div {
-            margin: 3px 0;
+        .invoice-header-main {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            column-gap: 0;
+            padding: 12px 16px 14px;
+        }
+        .header-showcase {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .header-showcase-left {
+            justify-content: flex-end;
+            padding-right: 18px;
+        }
+        .header-showcase-right {
+            justify-content: flex-start;
+            padding-left: 18px;
+        }
+        .header-brand {
+            text-align: center;
+            padding: 4px 22px;
+            border-left: 1px solid rgba(30, 90, 60, 0.35);
+            border-right: 1px solid rgba(30, 90, 60, 0.35);
+            min-width: 200px;
+        }
+        .header-brand img {
+            max-width: 220px;
+            max-height: 108px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+        .header-frame {
+            flex: 0 0 auto;
+            width: 56px;
+            height: 56px;
+            padding: 2px;
+            background: #fff;
+            border: 1.5px solid var(--theme-border);
+            border-radius: 4px;
+            box-shadow: 0 1px 4px rgba(11, 122, 68, 0.12);
+        }
+        .header-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 2px;
+            display: block;
+        }
+        .invoice-header-bottom {
+            height: 3px;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                var(--theme-primary) 15%,
+                var(--theme-primary) 85%,
+                transparent 100%
+            );
         }
         
         /* Section Headers */
@@ -235,7 +258,7 @@ Vector initialPayment = bill.getInitialBillPayment(billNo);
             font-weight: bold;
             border-bottom: 1px solid var(--theme-border);
             border-right: 1px solid var(--theme-border);
-            font-size: 11px;
+            font-size: 13px;
             letter-spacing: 0.5px;
         }
         
@@ -254,7 +277,7 @@ Vector initialPayment = bill.getInitialBillPayment(billNo);
         .info-content {
             padding: 10px;
             min-height: 50px;
-            font-size: 11px;
+            font-size: 13px;
             line-height: 1.6;
         }
         
@@ -270,8 +293,8 @@ Vector initialPayment = bill.getInitialBillPayment(billNo);
             border-right: 1px solid #000;
             border-top: 1px solid #000;
             border-bottom: 1px solid #000;
-            padding: 4px 2px;
-            font-size: 12px;
+            padding: 5px 4px;
+            font-size: 14px;
             text-align: center;
             font-weight: bold;
         }
@@ -286,21 +309,22 @@ Vector initialPayment = bill.getInitialBillPayment(billNo);
             border-right: 1px solid #000;
             border-top: none;
             border-bottom: none;
-            padding: 3px 4px;
-            font-size: 12px;
+            padding: 6px 6px;
+            font-size: 14px;
             vertical-align: middle;
+            line-height: 1.3;
         }
         .items-table tbody {
             display: table-row-group;
-            min-height: 200px;
-            height: 200px;
         }
         .items-table tbody tr:first-child td {
             border-top: 1px solid #000;
         }
         .empty-filler-row td {
             border-bottom: none !important;
-            height: 25px;
+            height: 18px;
+            padding: 2px 6px;
+            line-height: 1;
         }
         
         /* Total Row */
@@ -311,7 +335,8 @@ Vector initialPayment = bill.getInitialBillPayment(billNo);
         .total-row td {
             border-top: 1px solid #000 !important;
             border-bottom: 1px solid #000 !important;
-            font-size: 12px;
+            font-size: 14px;
+            padding: 6px 6px;
         }
         
         /* Tax & Amounts Section */
@@ -340,12 +365,12 @@ Vector initialPayment = bill.getInitialBillPayment(billNo);
             justify-content: space-between;
             padding: 6px 10px;
             border-bottom: 1px solid #e0e0e0;
-            font-size: 11px;
+            font-size: 13px;
         }
         .amount-row.total {
             font-weight: bold;
             border-bottom: none;
-            font-size: 13px;
+            font-size: 15px;
             background: var(--theme-light);
             padding: 8px 10px;
         }
@@ -361,7 +386,7 @@ Vector initialPayment = bill.getInitialBillPayment(billNo);
         }
         .payment-summary-section .ps-title {
             font-weight: bold;
-            font-size: 11px;
+            font-size: 13px;
             margin-bottom: 4px;
             background: var(--theme-light);
             padding: 4px 8px;
@@ -370,10 +395,10 @@ Vector initialPayment = bill.getInitialBillPayment(billNo);
         .payment-summary-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 10px;
+            font-size: 12px;
         }
         .payment-summary-table th {
-            background: #f1f3f5;
+            background: #ffffff;
             border: 1px solid #ccc;
             padding: 3px 6px;
             text-align: center;
@@ -403,7 +428,7 @@ Vector initialPayment = bill.getInitialBillPayment(billNo);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 11px;
+            font-size: 13px;
             font-weight: 600;
         }
         .amount-words-content {
@@ -418,7 +443,7 @@ Vector initialPayment = bill.getInitialBillPayment(billNo);
         .terms-box {
             width: 50%;
             border-right: 1px solid var(--theme-border);
-            font-size: 9px;
+            font-size: 11px;
         }
         .sign-box {
             width: 50%;
@@ -479,7 +504,7 @@ Vector initialPayment = bill.getInitialBillPayment(billNo);
         }
         .btn {
             padding: 10px 20px;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: bold;
             border: none;
             border-radius: 5px;
@@ -503,6 +528,10 @@ Vector initialPayment = bill.getInitialBillPayment(billNo);
         @media print {
             .print-controls {
                 display: none !important;
+            }
+            .invoice-header-top {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
         }
     </style>
@@ -534,23 +563,28 @@ Vector initialPayment = bill.getInitialBillPayment(billNo);
     <button class="btn btn-cancel" onclick="cancelPrint()">❌ Cancel</button>
 </div>
 
-<div class="header-title">Tax Invoice</div>
+
 
 <div class="container">
-    <!-- Header -->
-    <div class="company-header">
-        <div class="logo-area">
-            <img src="logo.png" alt="Company Logo" >
-            
+    <header class="invoice-header">
+        <div class="invoice-header-top">Invoice</div>
+        <div class="invoice-header-main">
+            <div class="header-showcase header-showcase-left">
+                <div class="header-frame"><img src="img/1.jpeg" alt=""></div>
+                <div class="header-frame"><img src="img/2.jpeg" alt=""></div>
+                <div class="header-frame"><img src="img/3.jpeg" alt=""></div>
+            </div>
+            <div class="header-brand">
+                <img src="logo.png" alt="Company Logo">
+            </div>
+            <div class="header-showcase header-showcase-right">
+                <div class="header-frame"><img src="img/4.jpeg" alt=""></div>
+                <div class="header-frame"><img src="img/5.jpeg" alt=""></div>
+                <div class="header-frame"><img src="img/6.jpeg" alt=""></div>
+            </div>
         </div>
-        
-        <div class="company-details">
-            <% if (!companyName.isEmpty()) { %>
-                <div class="company-name"><%= companyName %></div>
-            <% } %>
-            
-        </div>
-    </div>
+        <div class="invoice-header-bottom" aria-hidden="true"></div>
+    </header>
 
     <!-- Bill To & Invoice Details -->
     <div class="bill-info-row">
@@ -635,13 +669,13 @@ Vector initialPayment = bill.getInitialBillPayment(billNo);
             
             <!-- Add empty filler rows to maintain fixed height -->
             <% 
-            int minRows = 10; // Minimum rows to display
+            int minRows = 6; // Minimum rows to display
             int actualRows = billDetails.size();
             int emptyRowsNeeded = Math.max(0, minRows - actualRows);
             for(int i = 0; i < emptyRowsNeeded; i++) { 
             %>
             <tr class="empty-filler-row">
-                <td class="text-center" style="width: 5%; height: 25px;">&nbsp;</td>
+                <td class="text-center" style="width: 5%;">&nbsp;</td>
                 <td style="width: 48%;">&nbsp;</td>
                 <td class="text-right" style="width: 12%;">&nbsp;</td>
                 <td class="text-center" style="width: 10%;">&nbsp;</td>
@@ -859,8 +893,8 @@ Vector initialPayment = bill.getInitialBillPayment(billNo);
     border-top: 1px solid rgba(11,122,68,0.2);
     opacity: 0.55;
 ">
-    <span style="font-family: Arial, sans-serif; font-size: 8.5px; color: #1e5a3c; letter-spacing: 0.4px; font-weight: 600;">
-        Powered by <strong style="font-size: 9px; letter-spacing: 0.8px;">JASXBILL</strong>
+    <span style="font-family: Arial, sans-serif; font-size: 10.5px; color: #1e5a3c; letter-spacing: 0.4px; font-weight: 600;">
+        Powered by <strong style="font-size: 11px; letter-spacing: 0.8px;">JASXBILL</strong>
         <span style="margin: 0 4px; color: #999;">&mdash;</span>
         <span style="font-weight: 400; color: #444;">Smart Billing Software</span>
         <span style="margin: 0 5px; color: #bbb;">&bull;</span>
