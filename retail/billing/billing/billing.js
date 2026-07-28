@@ -46,33 +46,26 @@ customerNameInput.addEventListener("input", function() {
 
 function showCustomerAutocomplete(customers) {
     removeCustomerAutocomplete();
-    
+
     const list = document.createElement("ul");
     list.className = "autocomplete-list";
-    list.style.cssText = "position: absolute; z-index: 1000; background: white; border: 1px solid #ddd; list-style: none; padding: 0; margin: 0; max-height: 200px; overflow-y: auto; width: " + customerNameInput.offsetWidth + "px;";
-    
+
     customers.forEach(customer => {
         const item = document.createElement("li");
-        item.style.cssText = "padding: 8px 12px; cursor: pointer; border-bottom: 1px solid #eee;";
         item.textContent = customer.name + (customer.phone !== '-' ? ' - ' + customer.phone : '');
-        
-        item.addEventListener("mouseenter", function() {
-            this.style.backgroundColor = "#f0f0f0";
-        });
-        
-        item.addEventListener("mouseleave", function() {
-            this.style.backgroundColor = "white";
-        });
-        
         item.addEventListener("click", function() {
             selectCustomer(customer);
         });
-        
         list.appendChild(item);
     });
-    
-    customerNameInput.parentElement.style.position = "relative";
-    customerNameInput.parentElement.appendChild(list);
+
+    attachAutocompleteList(list, customerNameInput);
+}
+
+function attachAutocompleteList(list, input) {
+    const wrap = input.closest('.fl-input') || input.parentElement;
+    wrap.style.position = 'relative';
+    input.insertAdjacentElement('afterend', list);
 }
 
 function selectCustomer(customer) {
@@ -216,20 +209,15 @@ function showPhoneAutocomplete(customers) {
     const list = document.createElement('ul');
     list.id = 'phoneAutocompleteList';
     list.className = 'autocomplete-list';
-    list.style.cssText = 'position:absolute;z-index:1000;background:white;border:1px solid #ddd;list-style:none;padding:0;margin:0;max-height:200px;overflow-y:auto;width:' + customerPhnInput.offsetWidth + 'px;';
 
     customers.forEach(customer => {
         const item = document.createElement('li');
-        item.style.cssText = 'padding:8px 12px;cursor:pointer;border-bottom:1px solid #eee;';
         item.textContent = customer.phone + (customer.name ? ' — ' + customer.name : '');
-        item.addEventListener('mouseenter', function() { this.style.backgroundColor = '#f0f0f0'; });
-        item.addEventListener('mouseleave', function() { this.style.backgroundColor = 'white'; });
         item.addEventListener('click', function() { selectCustomer(customer); });
         list.appendChild(item);
     });
 
-    customerPhnInput.parentElement.style.position = 'relative';
-    customerPhnInput.parentElement.appendChild(list);
+    attachAutocompleteList(list, customerPhnInput);
 }
 
 function removePhoneAutocomplete() {
