@@ -1009,7 +1009,7 @@ ps.executeUpdate();
     
 }
 
-public String updatePendingDelivery(int billId, String deliveryDate, int isDownloaded, int photoCount) throws Exception {
+public String updatePendingDelivery(int billId, String deliveryDate, String description, int isDownloaded, int photoCount) throws Exception {
     Connection con = null;
     PreparedStatement ps = null;
     PreparedStatement verifyPs = null;
@@ -1019,7 +1019,7 @@ public String updatePendingDelivery(int billId, String deliveryDate, int isDownl
         con = util.DBConnectionManager.getConnectionFromPool();
         con.setAutoCommit(false);
 
-        String sql = "UPDATE prod_bill SET delivery_date = ?, is_downloaded = ?, " +
+        String sql = "UPDATE prod_bill SET delivery_date = ?, description = ?, is_downloaded = ?, " +
                      "download_date = CASE WHEN ? = 1 THEN CURDATE() ELSE NULL END, " +
                      "photo_count = CASE WHEN ? = 1 THEN ? ELSE NULL END " +
                      "WHERE id = ? AND IFNULL(is_cancelled,0)=0 AND IFNULL(is_delivered,0)=0";
@@ -1030,11 +1030,12 @@ public String updatePendingDelivery(int billId, String deliveryDate, int isDownl
         } else {
             ps.setNull(1, java.sql.Types.DATE);
         }
-        ps.setInt(2, isDownloaded == 1 ? 1 : 0);
+        ps.setString(2, description != null ? description.trim() : "");
         ps.setInt(3, isDownloaded == 1 ? 1 : 0);
         ps.setInt(4, isDownloaded == 1 ? 1 : 0);
-        ps.setInt(5, photoCount);
-        ps.setInt(6, billId);
+        ps.setInt(5, isDownloaded == 1 ? 1 : 0);
+        ps.setInt(6, photoCount);
+        ps.setInt(7, billId);
 
         int updated = ps.executeUpdate();
         if (updated <= 0) {

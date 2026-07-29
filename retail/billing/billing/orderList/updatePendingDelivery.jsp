@@ -14,6 +14,10 @@ try {
 
     String billIdStr = request.getParameter("billId");
     String deliveryDate = request.getParameter("deliveryDate");
+    String description = request.getParameter("description");
+    if (description == null) {
+        description = "";
+    }
     String isDownloadedStr = request.getParameter("isDownloaded");
     String photoCountStr = request.getParameter("photoCount");
 
@@ -36,7 +40,7 @@ try {
         try { photoCount = Integer.parseInt(photoCountStr.trim()); } catch (NumberFormatException ignore) {}
     }
 
-    String result = bill.updatePendingDelivery(billId, deliveryDate, isDownloaded, photoCount);
+    String result = bill.updatePendingDelivery(billId, deliveryDate, description, isDownloaded, photoCount);
     if ("SUCCESS".equals(result)) {
         out.print("{\"success\":true,\"message\":\"Updated successfully\"}");
     } else {

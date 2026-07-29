@@ -65,6 +65,13 @@ if (!permissions.contains(2)) {
         .modal .modal-body .form-select,
         .modal .modal-body textarea { font-size: 1.1rem; }
         .modal .modal-footer .btn { font-size: 1.12rem; }
+        #pendingEditModal .modal-body {
+            max-height: calc(100vh - 220px);
+            overflow-y: auto;
+        }
+        #pendingEditModal .modal-footer {
+            flex-shrink: 0;
+        }
         .click-row { cursor: pointer; }
         .click-row:hover > td { background: #f7f7fb; }
         .delivery-alert-row > td { background: #fdeaea !important; }
@@ -168,7 +175,7 @@ if (!permissions.contains(2)) {
                     </div>
                     <div class="mb-3">
                         <label for="editDescription" class="form-label">Description</label>
-                        <textarea id="editDescription" class="form-control" rows="3" readonly placeholder="No description"></textarea>
+                        <textarea id="editDescription" class="form-control" rows="3" maxlength="500" placeholder="Enter description"></textarea>
                     </div>
                     <div class="form-check mb-2">
                         <input class="form-check-input" type="checkbox" id="editDownloaded" onchange="togglePhotoCount(this)">
@@ -439,6 +446,7 @@ if (!permissions.contains(2)) {
         function updatePendingBill() {
             const billId = document.getElementById('editBillId').value;
             const deliveryDate = document.getElementById('editDeliveryDate').value;
+            const description = document.getElementById('editDescription').value.trim();
             const isDownloaded = document.getElementById('editDownloaded').checked ? 1 : 0;
             const photoCountVal = document.getElementById('editPhotoCount').value.trim();
             const photoCount = (isDownloaded && photoCountVal !== '') ? parseInt(photoCountVal, 10) : 0;
@@ -446,6 +454,7 @@ if (!permissions.contains(2)) {
             const body = new URLSearchParams();
             body.append('billId', billId);
             body.append('deliveryDate', deliveryDate);
+            body.append('description', description);
             body.append('isDownloaded', isDownloaded);
             body.append('photoCount', photoCount);
 
