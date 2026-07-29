@@ -1181,6 +1181,98 @@ public String markBillDelivered(int billId, String deliveryPlace, String deliver
     }
 }
 
+public Vector getDeliveredReport(String fromDate, String toDate) throws Exception {
+    Connection con = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    Vector vec = new Vector();
+
+    try {
+        con = util.DBConnectionManager.getConnectionFromPool();
+        String sql = "SELECT b.id, b.bill_display, IFNULL(b.cusName,'-') AS cusName, IFNULL(b.cusPhn,'-') AS cusPhn, "
+                   + "IFNULL(b.payable,0) AS payable, b.delivery_date, b.delivered_date, "
+                   + "IFNULL(b.delivery_place,'') AS delivery_place, IFNULL(b.delivery_person,'') AS delivery_person, "
+                   + "b.date, b.time, IFNULL(u.user_name,'-') AS staff_name, IFNULL(b.description,'') AS description, "
+                   + "(SELECT IFNULL(GROUP_CONCAT(p.name SEPARATOR ', '), '-') "
+                   + " FROM prod_bill_details bd JOIN prod_product p ON p.id = bd.prod_id WHERE bd.bill_id = b.id) AS item_names "
+                   + "FROM prod_bill b "
+                   + "LEFT JOIN users u ON u.id = b.uid "
+                   + "WHERE IFNULL(b.is_cancelled,0)=0 AND IFNULL(b.is_delivered,0)=1 "
+                   + "AND b.delivered_date BETWEEN ? AND ? "
+                   + "ORDER BY b.delivery_date DESC, b.date DESC, b.time DESC";
+
+        ps = con.prepareStatement(sql);
+        ps.setString(1, fromDate);
+        ps.setString(2, toDate);
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Vector row = new Vector();
+            row.addElement(String.valueOf(rs.getInt("id")));
+            row.addElement(rs.getString("bill_display"));
+            row.addElement(rs.getString("cusName"));
+            row.addElement(rs.getString("cusPhn"));
+            row.addElement(String.valueOf(rs.getDouble("payable")));
+            row.addElement(rs.getDate("delivery_date") != null ? rs.getDate("delivery_date").toString() : "");
+            row.addElement(rs.getDate("delivered_date") != null ? rs.getDate("delivered_date").toString() : "");
+            row.addElement(rs.getString("delivery_place"));
+            row.addElement(rs.getString("delivery_person"));
+            row.addElement(rs.getString("date"));
+            row.addElement(rs.getString("time"));
+            row.addElement(rs.getString("staff_name"));
+            row.addElement(rs.getString("item_names"));
+            row.addElement(rs.getString("description"));
+            vec.addElement(row);
+        }
+    } finally {
+        if (rs != null) try { rs.close(); } catch (Exception ignore) {}
+        if (ps != null) try { ps.close(); } catch (Exception ignore) {}
+        if (con != null) try { con.close(); } catch (Exception ignore) {}
+    }
+
+    return vec;
+}
+
+public Vector getDeliveredBillInfo(int billId) throws Exception {
+    Connection con = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    Vector row = new Vector();
+
+    try {
+        con = util.DBConnectionManager.getConnectionFromPool();
+        String sql = "SELECT b.bill_display, IFNULL(b.cusName,'-') AS cusName, IFNULL(b.cusPhn,'-') AS cusPhn, "
+                   + "IFNULL(b.description,'') AS description, b.delivery_date, b.delivered_date, "
+                   + "IFNULL(b.delivery_place,'') AS delivery_place, IFNULL(b.delivery_person,'') AS delivery_person, "
+                   + "b.date, b.time, IFNULL(b.is_delivered,0) AS is_delivered "
+                   + "FROM prod_bill b "
+                   + "WHERE b.id = ? AND IFNULL(b.is_cancelled,0)=0 AND IFNULL(b.is_delivered,0)=1";
+
+        ps = con.prepareStatement(sql);
+        ps.setInt(1, billId);
+        rs = ps.executeQuery();
+
+        if (rs.next()) {
+            row.addElement(rs.getString("bill_display"));
+            row.addElement(rs.getString("cusName"));
+            row.addElement(rs.getString("cusPhn"));
+            row.addElement(rs.getString("description"));
+            row.addElement(rs.getDate("delivery_date") != null ? rs.getDate("delivery_date").toString() : "");
+            row.addElement(rs.getDate("delivered_date") != null ? rs.getDate("delivered_date").toString() : "");
+            row.addElement(rs.getString("delivery_place"));
+            row.addElement(rs.getString("delivery_person"));
+            row.addElement(rs.getString("date"));
+            row.addElement(rs.getString("time"));
+        }
+    } finally {
+        if (rs != null) try { rs.close(); } catch (Exception ignore) {}
+        if (ps != null) try { ps.close(); } catch (Exception ignore) {}
+        if (con != null) try { con.close(); } catch (Exception ignore) {}
+    }
+
+    return row;
+}
+
 
 
 /*public void saveBillItem(int billId, int productId, int qty, double price, double discount, double total) throws Exception {
