@@ -518,27 +518,6 @@ String contextPath = request.getContextPath();
         padding: 0 !important;
     }
 
-    #printArea .header-box {
-        border: 1px solid #000 !important;
-        padding: 8px !important;
-        margin-bottom: 8px !important;
-        text-align: center !important;
-    }
-
-    #printArea .header-box h1 {
-        font-size: 20px !important;
-        margin: 0 0 4px !important;
-        color: #000 !important;
-        font-weight: 700 !important;
-    }
-
-    #printArea .header-box p {
-        margin: 2px 0 !important;
-        font-weight: 700 !important;
-        font-size: 13px !important;
-        color: #000 !important;
-    }
-
     #printArea #printTable {
         width: 100% !important;
         font-size: 12px !important;
@@ -833,31 +812,22 @@ function preparePrintTable(root) {
 }
 
 function printReport() {
-    fetch('<%=contextPath%>/printHeader.jsp')
-        .then(response => response.text())
-        .then(headerHtml => {
-            var printArea = document.createElement('div');
-            printArea.id = 'printArea';
-            printArea.innerHTML = headerHtml;
+    var reportWrap = document.querySelector('.sales-report-wrap');
+    if (!reportWrap) {
+        window.print();
+        return;
+    }
 
-            var reportWrap = document.querySelector('.sales-report-wrap');
-            if (!reportWrap) {
-                window.print();
-                return;
-            }
+    var printArea = document.createElement('div');
+    printArea.id = 'printArea';
 
-            var tableClone = reportWrap.cloneNode(true);
-            preparePrintTable(tableClone);
+    var tableClone = reportWrap.cloneNode(true);
+    preparePrintTable(tableClone);
 
-            printArea.appendChild(tableClone);
-            document.body.appendChild(printArea);
-            window.print();
-            document.body.removeChild(printArea);
-        })
-        .catch(error => {
-            console.error('Error loading print header:', error);
-            window.print();
-        });
+    printArea.appendChild(tableClone);
+    document.body.appendChild(printArea);
+    window.print();
+    document.body.removeChild(printArea);
 }
 
 function exportTableToExcel(tableID, filename = ''){
